@@ -5,7 +5,7 @@ import { GovernanceFeedback, GovernanceFeedback__factory } from "../types";
 import { expect } from "chai";
 import { FhevmType } from "@fhevm/hardhat-plugin";
 
-// Test signers type definition
+// Test signers type definition for contract testing
 type Signers = {
   deployer: HardhatEthersSigner;
   alice: HardhatEthersSigner;
