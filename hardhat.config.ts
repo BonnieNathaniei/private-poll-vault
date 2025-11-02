@@ -10,10 +10,11 @@ import "solidity-coverage";
 import type { HardhatUserConfig } from "hardhat/config";
 import { vars } from "hardhat/config";
 
-// Import custom tasks
+// Import custom tasks for development and testing
 import "./tasks/accounts";
 import "./tasks/GovernanceFeedback";
 import "./tasks/testDecryption";
+import "./tasks/deploy";
 
 const MNEMONIC = vars.get("MNEMONIC", "test test test test test test test test test test test junk");
 const PRIVATE_KEY = vars.get("PRIVATE_KEY", "");
