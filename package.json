@@ -76,7 +76,8 @@
     "deploy:sepolia": "hardhat deploy --network sepolia",
     "dev:frontend": "cd frontend && npm run dev",
     "build:frontend": "cd frontend && npm run build",
-    "install:frontend": "cd frontend && npm install"
+    "install:frontend": "cd frontend && npm install",
+    "clean:all": "npm run clean && rm -rf frontend/node_modules frontend/dist"
   }
 }
 
