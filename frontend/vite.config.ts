@@ -13,11 +13,13 @@ export default defineConfig({
   build: {
     sourcemap: false,
     minify: 'esbuild',
+    target: 'es2020',
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-          fhevm: ['@zama-fhe/relayer-sdk']
+          fhevm: ['@zama-fhe/relayer-sdk'],
+          ui: ['@rainbow-me/rainbowkit', 'wagmi']
         }
       }
     }
