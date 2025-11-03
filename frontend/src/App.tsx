@@ -19,10 +19,11 @@ function AppContent() {
   const { status: fhevmStatus, error: fhevmError } = useFhevm();
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  // Handle FHEVM initialization errors
+  // Handle FHEVM initialization errors with better logging
   const handleFhevmError = useCallback((error: Error) => {
-    console.error('FHEVM Error:', error);
-    // Could show toast notification here
+    console.error('FHEVM Initialization Error:', error.message);
+    console.error('Error stack:', error.stack);
+    // Could show toast notification or error UI here
   }, []);
   const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
 
