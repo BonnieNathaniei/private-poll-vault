@@ -18,6 +18,7 @@ Private Pool enables DAOs to collect encrypted satisfaction scores (1-10) from m
 
 - **Live Demo**: [https://private-vote-vault.vercel.app/](https://private-vote-vault.vercel.app/)
 - **Demo Video**: [private-pool.mp4](private-pool.mp4)
+- **Contract Address**: Deploy to Sepolia testnet
 
 ## Business Logic
 
