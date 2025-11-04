@@ -6,6 +6,7 @@ singleQuote: false
 quoteProps: as-needed
 trailingComma: all
 bracketSpacing: true
+bracketSameLine: false
 arrowParens: always
 overrides:
   - files: "*.sol"
