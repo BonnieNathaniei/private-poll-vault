@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "vercel-build": "npm run build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.1.7",
