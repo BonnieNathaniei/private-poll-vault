@@ -7,14 +7,14 @@ export function useFhevm() {
   const { isConnected } = useAccount();
   const chainId = useChainId();
 
-  // Determine FHEVM provider based on network
+  // Determine FHEVM provider based on network configuration
   const fhevmProvider = useMemo(() => {
-    // Local Hardhat network
+    // Local Hardhat network for development
     if (chainId === 31337) {
       return "http://127.0.0.1:8545";
     }
 
-    // Browser wallet provider for testnets/mainnet
+    // Browser wallet provider for testnets and mainnet
     if (typeof window !== 'undefined' && window.ethereum) {
       return window.ethereum;
     }
