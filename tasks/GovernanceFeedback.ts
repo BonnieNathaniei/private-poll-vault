@@ -1,3 +1,4 @@
+// Hardhat tasks for interacting with GovernanceFeedback contract
 import { task } from "hardhat/config";
 import type { TaskArguments } from "hardhat/types";
 
