@@ -12,7 +12,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "exactOptionalPropertyTypes": true
   },
   "include": ["./tasks", "./test", "./deploy", "./hardhat.config.ts"],
   "files": ["./hardhat.config.ts"],
