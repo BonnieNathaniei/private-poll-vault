@@ -1,5 +1,6 @@
 // Contract addresses for different networks
-// NOTE: Replace these with your deployed contract addresses
+// IMPORTANT: Replace these with your actual deployed contract addresses
+// Use: npx hardhat deploy --network <network_name> to deploy contracts
 export const CONTRACT_ADDRESSES = {
   localhost: '0x0000000000000000000000000000000000000000', // Auto-deployed locally
   sepolia: '0x0000000000000000000000000000000000000000', // Deploy with: npx hardhat deploy --network sepolia
