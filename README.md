@@ -384,3 +384,5 @@ For issues and questions:
 
 **Built with ❤️ using Zama's FHEVM technology**
 
+*Developed by MadelineMacMillan60 & BonnieNathaniei - November 2025*
+
