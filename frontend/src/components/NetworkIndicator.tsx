@@ -1,6 +1,7 @@
 import { useChainId } from 'wagmi';
 import { getContractAddress } from '../config/contract';
 
+// Component for displaying current network status and contract information
 export function NetworkIndicator() {
   const chainId = useChainId();
   const contractAddress = getContractAddress(chainId);
