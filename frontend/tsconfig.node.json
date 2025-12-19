@@ -4,9 +4,8 @@
     "skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "strict": true
   },
-  "include": ["vite.config.ts"],
-  "description": "TypeScript configuration for Node.js build tools"
+  "include": ["vite.config.ts"]
 }
-

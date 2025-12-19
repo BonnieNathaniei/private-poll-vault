@@ -9,18 +9,13 @@ import "hardhat-gas-reporter";
 import "solidity-coverage";
 import type { HardhatUserConfig } from "hardhat/config";
 import { vars } from "hardhat/config";
-
-// Import custom tasks for development and testing
 import "./tasks/accounts";
 import "./tasks/GovernanceFeedback";
 import "./tasks/testDecryption";
-import "./tasks/deploy";
 
 const MNEMONIC = vars.get("MNEMONIC", "test test test test test test test test test test test junk");
-const PRIVATE_KEY = vars.get("PRIVATE_KEY", "");
-const INFURA_API_KEY = vars.get("INFURA_API_KEY", "");
-const SEPOLIA_RPC_URL =
-  INFURA_API_KEY !== "" ? `https://sepolia.infura.io/v3/${INFURA_API_KEY}` : vars.get("SEPOLIA_RPC_URL", "https://1rpc.io/sepolia");
+const PRIVATE_KEY = vars.get("PRIVATE_KEY", "225b5ae9ef09d82df7aa6e90c091af3b9917913a2e0832cafed08f880920d9d4");
+const INFURA_API_KEY = vars.get("INFURA_API_KEY", "b18fb7e6ca7045ac83c41157ab93f990");
 const ETHERSCAN_API_KEY = vars.get("ETHERSCAN_API_KEY", "");
 
 const config: HardhatUserConfig = {
@@ -39,12 +34,8 @@ const config: HardhatUserConfig = {
   },
   networks: {
     sepolia: {
-      url: SEPOLIA_RPC_URL,
-      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : {
-        mnemonic: MNEMONIC,
-        path: "m/44'/60'/0'/0",
-        count: 10,
-      },
+      url: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
+      accounts: [PRIVATE_KEY],
       chainId: 11155111,
     },
     localhost: {

@@ -1,402 +1,396 @@
-export const GOVERNANCE_FEEDBACK_ABI = [
+export const GovernanceFeedbackABI = [
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "sessionId",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "member",
-        "type": "address"
-      }
-    ],
-    "name": "FeedbackSubmitted",
-    "type": "event"
+    inputs: [],
+    name: "HandlesAlreadySavedForRequestID",
+    type: "error",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "sessionId",
-        "type": "uint256"
+        indexed: true,
+        internalType: "uint256",
+        name: "sessionId",
+        type: "uint256",
       },
       {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "totalScore",
-        "type": "uint32"
+        indexed: true,
+        internalType: "address",
+        name: "member",
+        type: "address",
       },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "feedbackCount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "averageScore",
-        "type": "uint32"
-      }
     ],
-    "name": "Finalized",
-    "type": "event"
+    name: "FeedbackSubmitted",
+    type: "event",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "sessionId",
-        "type": "uint256"
+        indexed: true,
+        internalType: "uint256",
+        name: "sessionId",
+        type: "uint256",
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "requestId",
-        "type": "uint256"
-      }
+        indexed: false,
+        internalType: "uint256",
+        name: "requestId",
+        type: "uint256",
+      },
     ],
-    "name": "FinalizeRequested",
-    "type": "event"
+    name: "FinalizeRequested",
+    type: "event",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "sessionId",
-        "type": "uint256"
+        indexed: true,
+        internalType: "uint256",
+        name: "sessionId",
+        type: "uint256",
       },
       {
-        "indexed": false,
-        "internalType": "string",
-        "name": "proposalTitle",
-        "type": "string"
+        indexed: false,
+        internalType: "uint32",
+        name: "totalScore",
+        type: "uint32",
       },
       {
-        "indexed": false,
-        "internalType": "string",
-        "name": "description",
-        "type": "string"
+        indexed: false,
+        internalType: "uint256",
+        name: "feedbackCount",
+        type: "uint256",
       },
       {
-        "indexed": false,
-        "internalType": "uint64",
-        "name": "startTime",
-        "type": "uint64"
+        indexed: false,
+        internalType: "uint32",
+        name: "averageScore",
+        type: "uint32",
       },
-      {
-        "indexed": false,
-        "internalType": "uint64",
-        "name": "endTime",
-        "type": "uint64"
-      }
     ],
-    "name": "SessionCreated",
-    "type": "event"
+    name: "Finalized",
+    type: "event",
   },
   {
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "internalType": "string",
-        "name": "proposalTitle",
-        "type": "string"
+        indexed: true,
+        internalType: "uint256",
+        name: "sessionId",
+        type: "uint256",
       },
       {
-        "internalType": "string",
-        "name": "description",
-        "type": "string"
+        indexed: false,
+        internalType: "string",
+        name: "proposalTitle",
+        type: "string",
       },
       {
-        "internalType": "uint64",
-        "name": "startTime",
-        "type": "uint64"
+        indexed: false,
+        internalType: "string",
+        name: "description",
+        type: "string",
       },
       {
-        "internalType": "uint64",
-        "name": "endTime",
-        "type": "uint64"
-      }
+        indexed: false,
+        internalType: "uint64",
+        name: "startTime",
+        type: "uint64",
+      },
+      {
+        indexed: false,
+        internalType: "uint64",
+        name: "endTime",
+        type: "uint64",
+      },
     ],
-    "name": "createSession",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "sessionId",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "SessionCreated",
+    type: "event",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "requestId",
-        "type": "uint256"
+        internalType: "string",
+        name: "proposalTitle",
+        type: "string",
       },
       {
-        "internalType": "bytes",
-        "name": "cleartexts",
-        "type": "bytes"
+        internalType: "string",
+        name: "description",
+        type: "string",
       },
       {
-        "internalType": "bytes[]",
-        "name": "signatures",
-        "type": "bytes[]"
-      }
-    ],
-    "name": "decryptionCallback",
-    "outputs": [
+        internalType: "uint64",
+        name: "startTime",
+        type: "uint64",
+      },
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+        internalType: "uint64",
+        name: "endTime",
+        type: "uint64",
+      },
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "createSession",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "sessionId",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "sessionId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getEncryptedTotalScore",
-    "outputs": [
+        internalType: "uint256",
+        name: "requestId",
+        type: "uint256",
+      },
       {
-        "internalType": "euint32",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: "bytes",
+        name: "cleartexts",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes[]",
+        name: "signatures",
+        type: "bytes[]",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    name: "decryptionCallback",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "sessionId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getResults",
-    "outputs": [
-      {
-        "internalType": "uint32",
-        "name": "totalScore",
-        "type": "uint32"
+        internalType: "uint256",
+        name: "sessionId",
+        type: "uint256",
       },
-      {
-        "internalType": "uint256",
-        "name": "feedbackCount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint32",
-        "name": "averageScore",
-        "type": "uint32"
-      }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    name: "getEncryptedTotalScore",
+    outputs: [
+      {
+        internalType: "euint32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [],
-    "name": "getSessionCount",
-    "outputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "sessionId",
+        type: "uint256",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    name: "getResults",
+    outputs: [
+      {
+        internalType: "uint32",
+        name: "totalScore",
+        type: "uint32",
+      },
+      {
+        internalType: "uint256",
+        name: "feedbackCount",
+        type: "uint256",
+      },
+      {
+        internalType: "uint32",
+        name: "averageScore",
+        type: "uint32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [],
+    name: "getSessionCount",
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "sessionId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    "name": "getSessionInfo",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "proposalTitle",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "description",
-        "type": "string"
-      },
-      {
-        "internalType": "uint64",
-        "name": "startTime",
-        "type": "uint64"
-      },
-      {
-        "internalType": "uint64",
-        "name": "endTime",
-        "type": "uint64"
-      },
-      {
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "finalized",
-        "type": "bool"
-      },
-      {
-        "internalType": "uint256",
-        "name": "feedbackCount",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "sessionId",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "sessionId",
+        type: "uint256",
+      },
+    ],
+    name: "getSessionInfo",
+    outputs: [
+      {
+        internalType: "string",
+        name: "proposalTitle",
+        type: "string",
       },
       {
-        "internalType": "address",
-        "name": "member",
-        "type": "address"
-      }
-    ],
-    "name": "hasMemberSubmitted",
-    "outputs": [
+        internalType: "string",
+        name: "description",
+        type: "string",
+      },
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+        internalType: "uint64",
+        name: "startTime",
+        type: "uint64",
+      },
+      {
+        internalType: "uint64",
+        name: "endTime",
+        type: "uint64",
+      },
+      {
+        internalType: "address",
+        name: "creator",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "finalized",
+        type: "bool",
+      },
+      {
+        internalType: "uint256",
+        name: "feedbackCount",
+        type: "uint256",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "sessionId",
+        type: "uint256",
       },
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
+        internalType: "address",
+        name: "member",
+        type: "address",
+      },
     ],
-    "name": "hasSubmitted",
-    "outputs": [
+    name: "hasMemberSubmitted",
+    outputs: [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "sessionId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
     ],
-    "name": "requestFinalize",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "hasSubmitted",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [],
+    name: "protocolId",
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "sessionId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    "name": "grantDecryptionAccess",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    stateMutability: "pure",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "sessionId",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "sessionId",
+        type: "uint256",
       },
-      {
-        "internalType": "uint32",
-        "name": "totalScore",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "averageScore",
-        "type": "uint32"
-      }
     ],
-    "name": "finalizeWithResults",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "mockDecryptSession",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "sessionId",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "sessionId",
+        type: "uint256",
       },
-      {
-        "internalType": "externalEuint8",
-        "name": "encryptedScore",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes",
-        "name": "inputProof",
-        "type": "bytes"
-      }
     ],
-    "name": "submitFeedback",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }
+    name: "requestFinalize",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "sessionId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint8",
+        name: "plainScore",
+        type: "uint8",
+      },
+      {
+        internalType: "bytes",
+        name: "inputProof",
+        type: "bytes",
+      },
+    ],
+    name: "submitFeedback",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
 ] as const;
-

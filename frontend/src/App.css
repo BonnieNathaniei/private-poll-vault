@@ -1,0 +1,17 @@
+/* App-specific styles */
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* RainbowKit Connect Button customization */
+[data-rk] button {
+  border-radius: 0.75rem !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+[data-rk] button:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+}

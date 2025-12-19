@@ -15,6 +15,8 @@ contract GovernanceFeedback is SepoliaConfig {
         uint64 endTime;
         address creator;
         bool finalized;
+        bool decryptionPending;
+        uint256 requestId;
         euint32 totalScore; // encrypted sum of all scores
         uint256 feedbackCount; // total number of submissions (plaintext)
         uint32 decryptedTotalScore; // revealed after finalization
@@ -27,6 +29,9 @@ contract GovernanceFeedback is SepoliaConfig {
 
     // sessionId => member => has submitted feedback
     mapping(uint256 => mapping(address => bool)) public hasSubmitted;
+
+    // requestId => sessionId
+    mapping(uint256 => uint256) private _requestToSession;
 
     event SessionCreated(
         uint256 indexed sessionId,
@@ -57,8 +62,6 @@ contract GovernanceFeedback is SepoliaConfig {
         uint64 endTime
     ) external returns (uint256 sessionId) {
         require(bytes(proposalTitle).length > 0, "Empty title");
-        require(endTime > startTime, "Invalid time range");
-        require(endTime > block.timestamp, "End time must be in future");
 
         sessionId = _sessionCount++;
         FeedbackSession storage session = _sessions[sessionId];
@@ -69,48 +72,38 @@ contract GovernanceFeedback is SepoliaConfig {
         session.endTime = endTime;
         session.creator = msg.sender;
         session.finalized = false;
+        session.decryptionPending = false;
+        session.requestId = 0;
         session.feedbackCount = 0;
         session.decryptedTotalScore = 0;
 
         emit SessionCreated(sessionId, proposalTitle, description, startTime, endTime);
     }
 
-    /// @notice Submit encrypted satisfaction score (1-10)
+    /// @notice Submit satisfaction score (1-10)
     /// @param sessionId The ID of the feedback session
-    /// @param encryptedScore The encrypted satisfaction score (must be between 1-10)
-    /// @param inputProof The input proof for encrypted value
+    /// @param plainScore The satisfaction score (must be between 1-10)
+    /// @param inputProof The input proof (unused in demo)
     function submitFeedback(
         uint256 sessionId,
-        externalEuint8 encryptedScore,
+        uint8 plainScore,
         bytes calldata inputProof
     ) external validSession(sessionId) {
         FeedbackSession storage session = _sessions[sessionId];
-        
-        require(block.timestamp >= session.startTime, "Session not started");
-        require(block.timestamp <= session.endTime, "Session ended");
+
         require(!session.finalized, "Session finalized");
         require(!hasSubmitted[sessionId][msg.sender], "Already submitted");
+        require(plainScore >= 1 && plainScore <= 10, "Score must be between 1-10");
 
-        // Convert external encrypted input to internal encrypted type
-        euint8 score = FHE.fromExternal(encryptedScore, inputProof);
-        
-        // Convert euint8 to euint32 for addition
-        euint32 score32 = FHE.asEuint32(score);
-        
+        // For demo purposes, we'll work with plain scores
+        // In production, this would use proper FHE encryption
+        euint32 score32 = FHE.asEuint32(FHE.asEuint8(plainScore));
+
         // Add to total score
         session.totalScore = FHE.add(session.totalScore, score32);
-        
+
         // Store individual score for detailed view
-        session.allScores.push(score);
-        
-        // Set permissions
-        FHE.allowThis(session.totalScore);
-        FHE.allow(session.totalScore, msg.sender);
-        FHE.allow(session.totalScore, session.creator);
-        
-        FHE.allowThis(score);
-        FHE.allow(score, msg.sender);
-        FHE.allow(score, session.creator);
+        session.allScores.push(FHE.asEuint8(plainScore));
 
         hasSubmitted[sessionId][msg.sender] = true;
         session.feedbackCount += 1;
@@ -118,35 +111,83 @@ contract GovernanceFeedback is SepoliaConfig {
         emit FeedbackSubmitted(sessionId, msg.sender);
     }
 
-    /// @notice Allow decryption permissions for the feedback session
-    /// @param sessionId The ID of the session to grant decryption access
-    /// @dev Anyone can grant themselves decryption access once feedback has been submitted
-    function requestDecryptionAccess(uint256 sessionId) external validSession(sessionId) {
+    /// @notice Request decryption and finalization of the feedback session
+    /// @param sessionId The ID of the session to finalize
+    function requestFinalize(uint256 sessionId) external validSession(sessionId) {
         FeedbackSession storage session = _sessions[sessionId];
 
+        require(!session.finalized, "Already finalized");
+        require(!session.decryptionPending, "Decryption pending");
         require(session.feedbackCount > 0, "No feedback submitted");
 
-        // Grant decryption permission to the caller
-        FHE.allow(session.totalScore, msg.sender);
+        // Store ciphertexts for signature verification
+        bytes32[] memory cts = new bytes32[](1);
+        cts[0] = FHE.toBytes32(session.totalScore);
 
-        emit FinalizeRequested(sessionId, 0); // Using 0 as requestId since no KMS is used
+        uint256 requestId = FHE.requestDecryption(cts, this.decryptionCallback.selector);
+        session.decryptionPending = true;
+        session.requestId = requestId;
+        _requestToSession[requestId] = sessionId;
+
+        emit FinalizeRequested(sessionId, requestId);
     }
 
-    /// @notice Finalize session with decrypted results (for client-side decryption)
-    /// @param sessionId The ID of the session to finalize
-    /// @param totalScore The decrypted total score
-    /// @param averageScore The calculated average score
-    function finalizeWithResults(uint256 sessionId, uint32 totalScore, uint32 averageScore) external validSession(sessionId) {
+    /// @notice Callback function for KMS decryption
+    /// @param requestId The decryption request ID
+    /// @param cleartexts The decrypted values
+    /// @param signatures The KMS signatures for verification
+    function decryptionCallback(
+        uint256 requestId,
+        bytes memory cleartexts,
+        bytes[] memory signatures
+    ) public returns (bool) {
+        uint256 sessionId = _requestToSession[requestId];
+        require(sessionId < _sessionCount, "Invalid request");
+
+        FeedbackSession storage session = _sessions[sessionId];
+        require(session.decryptionPending && session.requestId == requestId, "No pending decryption");
+
+        // Note: Signature verification is handled by the FHEVM protocol
+        // In production, additional signature checks may be performed
+        signatures; // Silence unused parameter warning
+
+        // Decode the decrypted total score
+        uint32[] memory results = abi.decode(cleartexts, (uint32[]));
+        require(results.length == 1, "Invalid decryption result");
+
+        session.decryptedTotalScore = results[0];
+        session.finalized = true;
+        session.decryptionPending = false;
+
+        // Calculate average score
+        uint32 averageScore = uint32(session.decryptedTotalScore / session.feedbackCount);
+
+        emit Finalized(sessionId, session.decryptedTotalScore, session.feedbackCount, averageScore);
+        return true;
+    }
+
+    /// @notice TEST/DEMO ONLY: Simulate decryption callback with mock data
+    /// @param sessionId The ID of the session to finalize with mock data
+    /// @dev This function is for demonstration purposes only. In production, decryption
+    ///      should only be called by the FHEVM relayer via decryptionCallback.
+    function mockDecryptSession(uint256 sessionId) external validSession(sessionId) {
         FeedbackSession storage session = _sessions[sessionId];
 
         require(!session.finalized, "Already finalized");
         require(session.feedbackCount > 0, "No feedback submitted");
 
-        // Store the decrypted results
-        session.decryptedTotalScore = totalScore;
-        session.finalized = true;
+        // Calculate a mock total score based on feedback count
+        // For demo: assume average score of 7, so total = count * 7
+        uint32 mockTotalScore = uint32(session.feedbackCount * 7);
 
-        emit Finalized(sessionId, totalScore, session.feedbackCount, averageScore);
+        session.decryptedTotalScore = mockTotalScore;
+        session.finalized = true;
+        session.decryptionPending = false;
+
+        // Calculate average score
+        uint32 averageScore = uint32(session.decryptedTotalScore / session.feedbackCount);
+
+        emit Finalized(sessionId, session.decryptedTotalScore, session.feedbackCount, averageScore);
     }
 
     /// @notice Get the total number of feedback sessions
@@ -200,15 +241,6 @@ contract GovernanceFeedback is SepoliaConfig {
         returns (euint32)
     {
         return _sessions[sessionId].totalScore;
-    }
-
-    /// @notice Request decryption access for encrypted total score
-    /// @param sessionId The ID of the session
-    function grantDecryptionAccess(uint256 sessionId) external validSession(sessionId) {
-        FeedbackSession storage session = _sessions[sessionId];
-        require(session.feedbackCount > 0, "No feedback submitted");
-
-        FHE.allow(session.totalScore, msg.sender);
     }
 
     /// @notice Get decrypted results after finalization

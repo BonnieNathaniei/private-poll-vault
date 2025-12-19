@@ -1,11 +1,23 @@
 {
-  "extends": "solhint:recommended",
+  "extends": ["solhint:recommended"],
   "rules": {
-    "compiler-version": ["error", "^0.8.24"],
-    "func-visibility": ["warn", { "ignoreConstructors": true }],
+    "max-line-length": ["error", 100],
+    "no-empty-blocks": "off",
     "not-rely-on-time": "off",
-    "var-name-mixedcase": "off",
-    "func-name-mixedcase": "off"
+    "avoid-suicide": "error",
+    "avoid-sha3": "warn",
+    "state-visibility": "warn",
+    "func-visibility": ["warn", { "ignoreConstructors": true }],
+    "modifier-name-mixedcase": "warn",
+    "func-name-mixedcase": "warn",
+    "var-name-mixedcase": "warn",
+    "event-name-camelcase": "warn",
+    "const-name-snakecase": "warn",
+    "imports-on-top": "error",
+    "ordering": "warn",
+    "visibility-modifier-order": "warn",
+    "no-global-import": "off",
+    "compiler-version": ["error", "^0.8.24"],
+    "reason-string": ["warn", {"maxLength": 64}]
   }
 }
-

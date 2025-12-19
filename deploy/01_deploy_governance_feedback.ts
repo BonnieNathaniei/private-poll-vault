@@ -1,21 +1,35 @@
-import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { DeployFunction } from "hardhat-deploy/types";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-  const { deployer } = await hre.getNamedAccounts();
-  const { deploy } = hre.deployments;
+  const { deployments, getNamedAccounts } = hre;
+  const { deploy } = deployments;
 
-  const deployed = await deploy("GovernanceFeedback", {
+  const { deployer } = await getNamedAccounts();
+
+  console.log("Deploying GovernanceFeedback contract with account:", deployer);
+
+  const governanceFeedback = await deploy("GovernanceFeedback", {
     from: deployer,
     args: [],
     log: true,
-    skipIfAlreadyDeployed: false,
+    autoMine: true,
   });
 
-  console.log(`GovernanceFeedback contract deployed at: ${deployed.address}`);
+  console.log("GovernanceFeedback deployed to:", governanceFeedback.address);
+
+  // Verify contract if not on localhost
+  if (hre.network.name !== "localhost" && hre.network.name !== "hardhat") {
+    try {
+      await hre.run("verify:verify", {
+        address: governanceFeedback.address,
+        constructorArguments: [],
+      });
+    } catch (error) {
+      console.log("Verification failed:", error);
+    }
+  }
 };
 
 export default func;
-func.id = "deploy_governance_feedback";
 func.tags = ["GovernanceFeedback"];
-

@@ -7,7 +7,6 @@
     "npm": ">=7.0.0"
   },
   "license": "MIT",
-  "author": "CrystalLincoln & BonnieNathaniei",
   "keywords": [
     "fhevm",
     "zama",
@@ -68,16 +67,11 @@
     "prettier:write": "prettier --write \"**/*.{js,json,md,sol,ts,yml}\"",
     "test": "hardhat test",
     "test:sepolia": "hardhat test --network sepolia",
-    "test:integration": "hardhat test test/integration.ts",
     "build:ts": "tsc --project tsconfig.json",
     "typechain": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat typechain",
-    "start:local": "hardhat node",
+    "node": "hardhat node",
     "deploy:local": "hardhat deploy --network localhost",
-    "deploy:sepolia": "hardhat deploy --network sepolia",
-    "dev:frontend": "cd frontend && npm run dev",
-    "build:frontend": "cd frontend && npm run build",
-    "install:frontend": "cd frontend && npm install",
-    "clean:all": "npm run clean && rm -rf frontend/node_modules frontend/dist"
+    "deploy:sepolia": "hardhat deploy --network sepolia"
   }
 }
 

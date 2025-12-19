@@ -1,59 +1,35 @@
-import { useChainId } from 'wagmi';
-import { getContractAddress } from '../config/contract';
+import { useChainId, useChains } from "wagmi";
 
-// Component for displaying current network status and contract information
 export function NetworkIndicator() {
   const chainId = useChainId();
-  const contractAddress = getContractAddress(chainId);
+  const chains = useChains();
 
-  const getNetworkInfo = () => {
-    switch (chainId) {
-      case 31337:
-        return {
-          name: 'Localhost',
-          color: 'bg-purple-500',
-          icon: '🏠',
-        };
-      case 11155111:
-        return {
-          name: 'Sepolia',
-          color: 'bg-blue-500',
-          icon: '🌐',
-        };
-      default:
-        return {
-          name: 'Unknown',
-          color: 'bg-gray-500',
-          icon: '❓',
-        };
-    }
-  };
+  const currentChain = chains.find(chain => chain.id === chainId);
 
-  const network = getNetworkInfo();
+  if (!currentChain) {
+    return (
+      <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-red-50/80 backdrop-blur-sm border border-red-200 rounded-lg text-sm">
+        <div className="relative">
+          <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+          <div className="absolute inset-0 w-2 h-2 bg-red-500 rounded-full animate-ping opacity-75"></div>
+        </div>
+        <span className="font-semibold text-red-700">Disconnected</span>
+      </div>
+    );
+  }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      <div className="bg-slate-800 border border-slate-700 rounded-lg p-4 shadow-lg max-w-sm">
-        <div className="flex items-center gap-3 mb-2">
-          <span className="text-2xl">{network.icon}</span>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-white font-semibold">{network.name}</span>
-              <span className={`${network.color} w-2 h-2 rounded-full animate-pulse`}></span>
-            </div>
-            <div className="text-slate-400 text-xs">Chain ID: {chainId}</div>
-          </div>
-        </div>
-        <div className="text-slate-400 text-xs mt-2 border-t border-slate-700 pt-2">
-          <div className="flex items-center justify-between">
-            <span>Contract:</span>
-            <span className="font-mono text-slate-300 ml-2">
-              {contractAddress.slice(0, 6)}...{contractAddress.slice(-4)}
-            </span>
-          </div>
-        </div>
+    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-50/80 backdrop-blur-sm border border-green-200 rounded-lg text-sm">
+      <div className="relative">
+        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+        <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-pulse opacity-75"></div>
       </div>
+      <span className="font-semibold text-green-700">
+        {currentChain.name}
+      </span>
+      <span className="text-xs text-green-600 font-mono bg-green-100/60 px-1.5 py-0.5 rounded">
+        {currentChain.id}
+      </span>
     </div>
   );
 }
-
