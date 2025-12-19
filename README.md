@@ -6,6 +6,10 @@ Encrypted Governance Feedback System using FHEVM
 
 Private Pool Vault is a decentralized application that enables DAO members to submit encrypted feedback scores on governance proposals. The system uses Fully Homomorphic Encryption (FHE) to ensure that individual feedback remains private while allowing aggregate statistics to be computed and revealed.
 
+## 🚀 Live Demo
+
+Experience Private Pool Vault: [Live Demo](https://private-vote-vault.vercel.app/)
+
 ## Features
 
 - **Encrypted Feedback Submission**: Submit satisfaction scores (1-10) with complete privacy
@@ -115,23 +119,23 @@ npm run test:sepolia
 ```
 private-pool/
 ├── contracts/              # Smart contracts
-�?  └── GovernanceFeedback.sol
+�?  └── GovernanceFeedback.sol
 ├── deploy/                 # Deployment scripts
-�?  └── 01_deploy_governance_feedback.ts
+�?  └── 01_deploy_governance_feedback.ts
 ├── test/                   # Test files
-�?  ├── GovernanceFeedback.ts
-�?  └── GovernanceFeedbackSepolia.ts
+�?  ├── GovernanceFeedback.ts
+�?  └── GovernanceFeedbackSepolia.ts
 ├── tasks/                  # Hardhat tasks
-�?  ├── accounts.ts
-�?  └── GovernanceFeedback.ts
+�?  ├── accounts.ts
+�?  └── GovernanceFeedback.ts
 ├── frontend/               # React frontend
-�?  ├── src/
-�?  �?  ├── components/    # React components
-�?  �?  ├── config/        # Wagmi & contract config
-�?  �?  ├── hooks/         # Custom hooks
-�?  �?  ├── abi/           # Contract ABIs
-�?  �?  └── fhevm-sdk/     # FHEVM encryption SDK
-�?  └── public/            # Static assets
+�?  ├── src/
+�?  �?  ├── components/    # React components
+�?  �?  ├── config/        # Wagmi & contract config
+�?  �?  ├── hooks/         # Custom hooks
+�?  �?  ├── abi/           # Contract ABIs
+�?  �?  └── fhevm-sdk/     # FHEVM encryption SDK
+�?  └── public/            # Static assets
 ├── hardhat.config.ts      # Hardhat configuration
 └── package.json           # Dependencies
 ```
